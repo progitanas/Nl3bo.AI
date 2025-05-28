@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nl3bo.AI - Révolutionnez l'expérience spectateur</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #1B7332;
+            --primary-red: #DA020E;
+            --accent-gold: #FFD700;
+            --dark-bg: #0a0a0a;
+            --gradient-bg: linear-gradient(135deg, #1B7332 0%, #DA020E 50%, #FFD700 100%);
+            --text-light: #ffffff;
+            --text-dark: #333333;
+            --card-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Language Toggle */
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--card-bg);
+            padding: 10px;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .lang-toggle button {
+            background: none;
+            border: none;
+            padding: 8px 15px;
+            margin: 0 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .lang-toggle button.active {
+            background: var(--gradient-bg);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: var(--gradient-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="3" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: var(--text-light);
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: slideInUp 1s ease-out;
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            animation: slideInUp 1s ease-out 0.3s both;
+        }
+
+        .hero .tagline {
+            font-size: 1.2rem;
+            font-style: italic;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            animation: slideInUp 1s ease-out 0.6s both;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: slideInUp 1s ease-out 0.9s both;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--text-light);
+            color: var(--primary-green);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-light);
+            border: 2px solid var(--text-light);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            z-index: 999;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .nav.visible {
+            transform: translateY(0);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: var(--gradient-bg);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-green);
+        }
+
+        /* Sections */
+        .section {
+            padding: 100px 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: var(--gradient-bg);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Games Grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .game-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient-bg);
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .game-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-green);
+        }
+
+        .game-card .icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--primary-red);
+        }
+
+        /* Stats */
+        .stats {
+            background: var(--dark-bg);
+            color: var(--text-light);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 50px;
+            align-items: center;
+        }
+
+        .contact-info h3 {
+            color: var(--primary-green);
+            margin-bottom: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .contact-item i {
+            color: var(--primary-red);
+            margin-right: 15px;
+            width: 20px;
+        }
+
+        .download-section {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .download-btn {
+            background: var(--gradient-bg);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark-bg);
+            color: var(--text-light);
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .section {
+                padding: 60px 0;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Language Toggle -->
+    <div class="lang-toggle">
+        <button onclick="switchLanguage('fr')" id="fr-btn" class="active">FR</button>
+        <button onclick="switchLanguage('en')" id="en-btn">EN</button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="navbar">
+        <div class="nav-content">
+            <div class="logo">Nl3bo.AI</div>
+            <ul class="nav-links">
+                <li><a href="#home" data-fr="Accueil" data-en="Home">Accueil</a></li>
+                <li><a href="#concept" data-fr="Concept" data-en="Concept">Concept</a></li>
+                <li><a href="#games" data-fr="Jeux" data-en="Games">Jeux</a></li>
+                <li><a href="#contact" data-fr="Contact" data-en="Contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1 data-fr="Nl3bo.AI" data-en="Nl3bo.AI">Nl3bo.AI</h1>
+            <p class="subtitle" data-fr="Révolutionnez l'expérience spectateur" data-en="Revolutionize the spectator experience">Révolutionnez l'expérience spectateur</p>
+            <p class="tagline" data-fr="Matbqach ghir katchouf l-match... wlli tl3bou !" data-en="Don't just watch the match... come play it!">"Matbqach ghir katchouf l-match... wlli tl3bou !"</p>
+            <div class="cta-buttons">
+                <a href="#concept" class="btn btn-primary" data-fr="Découvrir le concept" data-en="Discover the concept">Découvrir le concept</a>
+                <a href="#contact" class="btn btn-secondary" data-fr="Devenir partenaire" data-en="Become a partner">Devenir partenaire</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Concept Section -->
+    <section class="section" id="concept">
+        <h2 data-fr="Le Concept" data-en="The Concept">Le Concept</h2>
+        <div style="text-align: center; font-size: 1.2rem; line-height: 1.8; max-width: 800px; margin: 0 auto;">
+            <p data-fr="Nl3bo.AI transforme l'expérience des spectateurs dans les stades en créant une nouvelle forme d'engagement live via des jeux interactifs. Imaginez passer de simple spectateur à véritable joueur, avec votre téléphone comme manette, participant à des défis en temps réel avec des milliers d'autres fans !" 
+               data-en="Nl3bo.AI transforms the spectator experience in stadiums by creating a new form of live engagement through interactive games. Imagine going from a simple spectator to a real player, with your phone as a controller, participating in real-time challenges with thousands of other fans!">
+                Nl3bo.AI transforme l'expérience des spectateurs dans les stades en créant une nouvelle forme d'engagement live via des jeux interactifs. Imaginez passer de simple spectateur à véritable joueur, avec votre téléphone comme manette, participant à des défis en temps réel avec des milliers d'autres fans !
+            </p>
+        </div>
+    </section>
+
+    <!-- Games Section -->
+    <section class="section" id="games">
+        <h2 data-fr="Nos Jeux Interactifs" data-en="Our Interactive Games">Nos Jeux Interactifs</h2>
+        <div class="games-grid">
+            <div class="game-card">
+                <div class="icon"><i class="fas fa-camera"></i></div>
+                <h3 data-fr="Nl3bo.AI Selfie" data-en="Nl3bo.AI Selfie">Nl3bo.AI Selfie</h3>
+                <p data-fr="Montrez votre passion pour votre équipe ! Prenez les meilleurs selfies individuels ou en groupe, collectez les likes et créez des connexions authentiques avec d'autres supporters." 
+                   data-en="Show your passion for your team! Take the best individual or group selfies, collect likes and create authentic connections with other supporters.">
+                    Montrez votre passion pour votre équipe ! Prenez les meilleurs selfies individuels ou en groupe, collectez les likes et créez des connexions authentiques avec d'autres supporters.
+                </p>
+            </div>
+            
+            <div class="game-card">
+                <div class="icon"><i class="fas fa-microphone"></i></div>
+                <h3 data-fr="Nl3bo.AI Karaoké" data-en="Nl3bo.AI Karaoke">Nl3bo.AI Karaoké</h3>
+                <p data-fr="Complétez les paroles des chants populaires ! Mode interactif sur l'app ou mode vocal avec toute la tribune. L'intelligence sonore analyse la justesse et la synchronisation." 
+                   data-en="Complete the lyrics of popular chants! Interactive mode on the app or vocal mode with the entire stand. Sound intelligence analyzes accuracy and synchronization.">
+                    Complétez les paroles des chants populaires ! Mode interactif sur l'app ou mode vocal avec toute la tribune. L'intelligence sonore analyse la justesse et la synchronisation.
+                </p>
+            </div>
+            
+            <div class="game-card">
+                <div class="icon"><i class="fas fa-running"></i></div>
+                <h3 data-fr="Nl3bo.AI Imitation" data-en="Nl3bo.AI Imitation">Nl3bo.AI Imitation</h3>
+                <p data-fr="Imitez les gestes cultes de vos joueurs préférés ! Filmez-vous en train de reproduire les célébrations iconiques de manière réaliste, drôle ou créative." 
+                   data-en="Imitate the iconic gestures of your favorite players! Film yourself reproducing iconic celebrations in a realistic, funny or creative way.">
+                    Imitez les gestes cultes de vos joueurs préférés ! Filmez-vous en train de reproduire les célébrations iconiques de manière réaliste, drôle ou créative.
+                </p>
+            </div>
+            
+            <div class="game-card">
+                <div class="icon"><i class="fas fa-question-circle"></i></div>
+                <h3 data-fr="Nl3bo.AI Quiz" data-en="Nl3bo.AI Quiz">Nl3bo.AI Quiz</h3>
+                <p data-fr="Testez vos connaissances sur les équipes qui s'affrontent ! QCM et Vrai-Faux sur l'histoire, les joueurs et les statistiques des nations en compétition." 
+                   data-en="Test your knowledge about the competing teams! MCQ and True-False about the history, players and statistics of the competing nations.">
+                    Testez vos connaissances sur les équipes qui s'affrontent ! QCM et Vrai-Faux sur l'histoire, les joueurs et les statistiques des nations en compétition.
+                </p>
+            </div>
+            
+            <div class="game-card">
+                <div class="icon"><i class="fas fa-laugh"></i></div>
+                <h3 data-fr="Nl3bo.AI Expression" data-en="Nl3bo.AI Expression">Nl3bo.AI Expression</h3>
+                <p data-fr="Exprimez vos émotions ! Faites les meilleures expressions faciales (colère, joie, dégoût) en réaction aux actions du match. Originalité et humour sont récompensés !" 
+                   data-en="Express your emotions! Make the best facial expressions (anger, joy, disgust) in reaction to match actions. Originality and humor are rewarded!">
+                    Exprimez vos émotions ! Faites les meilleures expressions faciales (colère, joie, dégoût) en réaction aux actions du match. Originalité et humour sont récompensés !
+                </p>
+            </div>
+            
+            <div class="game-card">
+                <div class="icon"><i class="fas fa-bolt"></i></div>
+                <h3 data-fr="Nl3bo.AI Instantané" data-en="Nl3bo.AI Instant">Nl3bo.AI Instantané</h3>
+                <p data-fr="Réagissez en temps réel ! Dès qu'un événement se produit sur le terrain (but, carton, faute), filmez votre réaction la plus drôle ou originale." 
+                   data-en="React in real time! As soon as an event happens on the field (goal, card, foul), film your funniest or most original reaction.">
+                    Réagissez en temps réel ! Dès qu'un événement se produit sur le terrain (but, carton, faute), filmez votre réaction la plus drôle ou originale.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3>68,500</h3>
+                <p data-fr="Spectateurs potentiels" data-en="Potential spectators">Spectateurs potentiels</p>
+                <small data-fr="(Stade Moulay Abdellah)" data-en="(Moulay Abdellah Stadium)">(Stade Moulay Abdellah)</small>
+            </div>
+            <div class="stat-item">
+                <h3>20+</h3>
+                <p data-fr="Jeux interactifs" data-en="Interactive games">Jeux interactifs</p>
+                <small data-fr="Catégorisés et testés" data-en="Categorized and tested">Catégorisés et testés</small>
+            </div>
+            <div class="stat-item">
+                <h3>100%</h3>
+                <p data-fr="Engagement" data-en="Engagement">Engagement</p>
+                <small data-fr="Expérience immersive" data-en="Immersive experience">Expérience immersive</small>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section contact" id="contact">
+        <h2 data-fr="Contact & Partenariat" data-en="Contact & Partnership">Contact & Partenariat</h2>
+        <div class="contact-content">
+            <div class="contact-info">
+                <h3 data-fr="SENHAJI Anas" data-en="SENHAJI Anas">SENHAJI Anas</h3>
+                <p data-fr="Fondateur & Créateur de Nl3bo.AI" data-en="Founder & Creator of Nl3bo.AI">Fondateur & Créateur de Nl3bo.AI</p>
+                
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>asenhaji2@um6ss.ma</span>
+                </div>
+                
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>+212 688 933 451</span>
+                </div>
+                
+                <div class="contact-item">
+                    <i class="fab fa-linkedin"></i>
+                    <a href="https://linkedin.com/in/spyanas" target="_blank" style="color: var(--primary-green);">linkedin.com/in/spyanas</a>
+                </div>
+                
+                <div class="contact-item">
+                    <i class="fas fa-globe-africa"></i>
+                    <span data-fr="Basé au Maroc 🇲🇦" data-en="Based in Morocco 🇲🇦">Basé au Maroc 🇲🇦</span>
+                </div>
+            </div>
+            
+            <div class="partnership-info">
+                <h3 data-fr="Pourquoi nous choisir ?" data-en="Why choose us?">Pourquoi nous choisir ?</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 15px;"><i class="fas fa-check" style="color: var(--primary-green); margin-right: 10px;"></i> <span data-fr="Innovation 100% marocaine" data-en="100% Moroccan innovation">Innovation 100% marocaine</span></li>
+                    <li style="margin-bottom: 15px;"><i class="fas fa-check" style="color: var(--primary-green); margin-right: 10px;"></i> <span data-fr="Équipe passionnée de sport" data-en="Team passionate about sports">Équipe passionnée de sport</span></li>
+                    <li style="margin-bottom: 15px;"><i class="fas fa-check" style="color: var(--primary-green); margin-right: 10px;"></i> <span data-fr="Technologie adaptée aux stades" data-en="Technology adapted to stadiums">Technologie adaptée aux stades</span></li>
+                    <li style="margin-bottom: 15px;"><i class="fas fa-check" style="color: var(--primary-green); margin-right: 10px;"></i> <span data-fr="Expérience utilisateur immersive" data-en="Immersive user experience">Expérience utilisateur immersive</span></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="download-section">
+            <h3 data-fr="Télécharger le Pitch Complet" data-en="Download Full Pitch">Télécharger le Pitch Complet</h3>
+            <a href="https://drive.google.com/file/d/1dVb8m4n-3PIhL46U6cTbJHtPQJmkpEcI/view?usp=sharing" class="download-btn" target="_blank" id="download-link">
+                <i class="fas fa-download"></i> <span data-fr="Télécharger le PDF" data-en="Download PDF">Télécharger le PDF</span>
+            </a>
+            <p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.8;">
+                <span data-fr="📧 Ou contactez-nous directement pour recevoir le pitch deck par email" 
+                      data-en="📧 Or contact us directly to receive the pitch deck by email">
+                    📧 Ou contactez-nous directement pour recevoir le pitch deck par email
+                </span>
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p data-fr="© 2025 Nl3bo.AI - Révolutionnons l'expérience spectateur ensemble ! 🇲🇦⚽" 
+           data-en="© 2025 Nl3bo.AI - Let's revolutionize the spectator experience together! 🇲🇦⚽">
+            © 2025 Nl3bo.AI - Révolutionnons l'expérience spectateur ensemble ! 🇲🇦⚽
+        </p>
+    </footer>
+
+    <script>
+        // Language switching
+        let currentLang = 'fr';
+        
+        function switchLanguage(lang) {
+            currentLang = lang;
+            
+            // Update active button
+            document.getElementById('fr-btn').classList.toggle('active', lang === 'fr');
+            document.getElementById('en-btn').classList.toggle('active', lang === 'en');
+            
+            // Update all translatable elements
+            const elements = document.querySelectorAll('[data-fr][data-en]');
+            elements.forEach(element => {
+                element.textContent = element.getAttribute('data-' + lang);
+            });
+            
+            // Update HTML lang attribute
+            document.documentElement.lang = lang;
+        }
+
+        // Navbar show/hide on scroll
+        let lastScrollTop = 0;
+        const navbar = document.getElementById('navbar');
+
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > 100) {
+                navbar.classList.add('visible');
+            } else {
+                navbar.classList.remove('visible');
+            }
+            
+            lastScrollTop = scrollTop;
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Setup download link functionality
+        function setupDownloadLink() {
+            const downloadBtn = document.getElementById('download-link');
+            
+            // Replace this URL with your actual file link
+            const pitchDeckUrl = "https://drive.google.com/file/d/1dVb8m4n-3PIhL46U6cTbJHtPQJmkpEcI/view?usp=sharing";
+            
+            // You can also use other hosting services:
+            // - Dropbox: "https://www.dropbox.com/s/YOUR_FILE_ID/filename.pdf?dl=1"
+            // - OneDrive: Your OneDrive sharing link
+            // - WeTransfer: Your WeTransfer download link
+            
+            downloadBtn.href = pitchDeckUrl;
+            
+            // Track download clicks (optional)
+            downloadBtn.addEventListener('click', function(e) {
+                // Add analytics tracking here if needed
+                console.log('Pitch deck download initiated');
+                
+                // Optional: Show a thank you message
+                setTimeout(() => {
+                    if (currentLang === 'fr') {
+                        alert('Merci de votre intérêt pour Nl3bo.AI ! 🚀');
+                    } else {
+                        alert('Thank you for your interest in Nl3bo.AI! 🚀');
+                    }
+                }, 1000);
+            });
+        }
+
+        // Initialize download functionality
+        setupDownloadLink();
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all game cards for animation
+        document.querySelectorAll('.game-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
